@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# pre-commit — Hook instalado en .git/hooks/pre-commit vía `just install-hooks`.
+set -euo pipefail
+
+bash bin/gate.sh

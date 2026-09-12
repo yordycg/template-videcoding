@@ -1,0 +1,33 @@
+# Sistema Operativo
+.DS_Store
+Thumbs.db
+
+# Entornos Locales y Dependencias
+node_modules/
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Variables de Entorno (¡Nunca subir el archivo real!)
+.env
+.env.local
+*.env
+
+# Build y Logs
+dist/
+build/
+coverage/
+*.log
+
+# Editores y Entornos
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Obsidian: ignorar estado local del vault, pero trackear plugins (ej. canvas-watcher)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
