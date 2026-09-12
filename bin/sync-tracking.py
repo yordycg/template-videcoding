@@ -41,8 +41,9 @@ COLOR = {
 
 
 def canvas_states():
+    tool_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "canvas-tool.py")
     res = subprocess.run(
-        ["python3", "canvas-tool.py", CANVAS, "dump"],
+        ["python3", tool_path, CANVAS, "dump"],
         cwd=PROJECT_ROOT,
         capture_output=True,
         text=True,

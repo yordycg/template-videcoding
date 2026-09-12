@@ -10,16 +10,20 @@ default:
 setup:
     #!/usr/bin/env bash
     set -euo pipefail
-    test -f canvas-tool.py || { echo "Falta canvas-tool.py"; exit 1; }
+    test -f bin/canvas-tool.py || { echo "Falta bin/canvas-tool.py"; exit 1; }
     test -f Project.canvas || { echo "Falta Project.canvas"; exit 1; }
-    python3 canvas-tool.py "Project.canvas" status
+    if command -v opencode &>/dev/null; then
+        mkdir -p .opencode
+        ln -sfn ../.agents/agents .opencode/agent
+    fi
+    python3 bin/canvas-tool.py "Project.canvas" status
     echo "✓ Tablero OK. Ábrelo en Obsidian para el watcher plugin (opcional)."
 
 status:
-    python3 canvas-tool.py "Project.canvas" status
+    python3 bin/canvas-tool.py "Project.canvas" status
 
 ready:
-    python3 canvas-tool.py "Project.canvas" ready
+    python3 bin/canvas-tool.py "Project.canvas" ready
 
 # Reconciliar TASKS.md <-> Project.canvas (usar si divergen)
 sync-tracking:

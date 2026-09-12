@@ -9,7 +9,9 @@ Protocolo de gestión de tareas colaborativo entre el humano y los agentes usand
 **Los agentes NUNCA editan `.canvas` directamente.** Toda modificación pasa por la CLI, que fuerza las reglas (transiciones válidas, detección de ciclos, estados bloqueados):
 
 ```bash
-python canvas-tool.py "Project.canvas" <command> [args]
+python3 bin/canvas-tool.py "Project.canvas" <command> [args]
+# o mediante atajos de Justfile:
+just canvas <command> [args]
 ```
 
 La herramienta genera IDs, gestiona dependencias y colores. La edición directa del JSON está **prohibida**.
@@ -57,7 +59,7 @@ Cada transición del canvas se refleja en `TASKS.md` en el **mismo commit** (ver
 
 ## Sesión (protocolo)
 
-1. **Inicio** — `python canvas-tool.py "Project.canvas" status` y `normalize` si hace falta.
+1. **Inicio** — `just status` (o `python3 bin/canvas-tool.py "Project.canvas" status`) y `normalize` si hace falta.
 2. **Elegir tarea** — `ready` → `show <ID>` → `start <ID>` (y marcar `— ▶ en curso` en `TASKS.md`).
 3. **Trabajar** — TDD estricto (ver `AGENTS.md §3`); subtareas → `propose`; notas → `edit`.
 4. **Terminar** — `finish <ID>` (cian) + marcar `— 🔵 en revisión` en `TASKS.md`. Informar al humano. NO poner verde.

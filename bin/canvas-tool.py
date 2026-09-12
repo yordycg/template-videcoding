@@ -1239,25 +1239,31 @@ def cmd_init(target_dir, install_plugin=True):
     print(f"Initializing Kanvas in: {target}\n")
     copied = []
 
-    # 1. Copy canvas-tool.py
-    src_tool = os.path.join(script_dir, "canvas-tool.py")
-    dst_tool = os.path.join(target, "canvas-tool.py")
+    project_root = os.path.dirname(script_dir)
+
+    # 1. Copy canvas-tool.py to bin/
+    src_tool = os.path.abspath(__file__)
+    dst_bin = os.path.join(target, "bin")
+    os.makedirs(dst_bin, exist_ok=True)
+    dst_tool = os.path.join(dst_bin, "canvas-tool.py")
     if os.path.abspath(src_tool) != os.path.abspath(dst_tool):
         shutil.copy2(src_tool, dst_tool)
-        copied.append("canvas-tool.py")
+        copied.append("bin/canvas-tool.py")
 
-    # 2. Copy agent instruction files
-    for agent_file in ("CLAUDE.md", "AGENTS.md"):
-        src = os.path.join(script_dir, agent_file)
+    # 2. Copy AGENTS.md
+    for agent_file in ("AGENTS.md",):
+        src = os.path.join(project_root, agent_file)
         if os.path.isfile(src):
             shutil.copy2(src, os.path.join(target, agent_file))
             copied.append(agent_file)
 
-    # 3. Copy RULES.md
-    src_rules = os.path.join(script_dir, "RULES.md")
+    # 3. Copy .agents/rules.md
+    src_rules = os.path.join(project_root, ".agents", "rules.md")
     if os.path.isfile(src_rules):
-        shutil.copy2(src_rules, os.path.join(target, "RULES.md"))
-        copied.append("RULES.md")
+        dst_agents = os.path.join(target, ".agents")
+        os.makedirs(dst_agents, exist_ok=True)
+        shutil.copy2(src_rules, os.path.join(dst_agents, "rules.md"))
+        copied.append(".agents/rules.md")
 
     # 4. Copy blank canvas template if no .canvas file exists yet
     existing_canvas = [f for f in os.listdir(target) if f.endswith(".canvas")]

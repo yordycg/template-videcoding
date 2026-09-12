@@ -27,4 +27,4 @@
 
 ## Roadmap
 
-Ver [`ROADMAP.md`](./ROADMAP.md) y el tablero `Project.canvas`.
+Ver [`docs/roadmap.md`](./docs/roadmap.md) y el tablero `Project.canvas`.

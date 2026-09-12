@@ -19,7 +19,7 @@
 ### Setup
 - [ ] `SETUP-01` Bootstrap del proyecto
 - [ ] `SETUP-02` Estructura de carpetas
-- [ ] `SETUP-03` Fijar CODESTYLE.md
+- [ ] `SETUP-03` Fijar .agents/codestyle.md
 
 ### <Área>
 - [ ] `API-01` <tarea> — *depende de SETUP-01*

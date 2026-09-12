@@ -8,7 +8,7 @@
 
 - [ ] `SETUP-01` Bootstrap del proyecto: tooling, test runner, linter, Justfile (targets `lint`/`test`/`dev`).
 - [ ] `SETUP-02` Estructura de carpetas + módulo vacío compilando con test de humo.
-- [ ] `SETUP-03` Fijar `CODESTYLE.md` con el ejemplo de estilo heredado.
+- [ ] `SETUP-03` Fijar `.agents/codestyle.md` con el ejemplo de estilo heredado.
 
 ## Fase 1 — <área>
 

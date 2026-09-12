@@ -21,9 +21,10 @@ build/
 coverage/
 *.log
 
-# Editores y Entornos
+# Editores y Entornos Locales de IA
 .idea/
 .vscode/
+.opencode/
 *.swp
 *.swo
 
