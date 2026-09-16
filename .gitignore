@@ -25,6 +25,8 @@ coverage/
 .idea/
 .vscode/
 .opencode/
+.pi/*
+!.pi/settings.json
 *.swp
 *.swo
 

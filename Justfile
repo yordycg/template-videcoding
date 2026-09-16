@@ -16,8 +16,9 @@ setup:
         mkdir -p .opencode
         ln -sfn ../.agents/agents .opencode/agent
     fi
+    test -f .pi/settings.json || echo "⚠ Falta .pi/settings.json para aislamiento de skills."
     python3 bin/canvas-tool.py "Project.canvas" status
-    echo "✓ Tablero OK. Ábrelo en Obsidian para el watcher plugin (opcional)."
+    echo "✓ Tablero y entorno de agentes OK (OpenCode + Pi + Antigravity)."
 
 status:
     python3 bin/canvas-tool.py "Project.canvas" status

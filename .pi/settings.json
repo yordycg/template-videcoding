@@ -1,0 +1,18 @@
+{
+  "skills": [
+    "/home/yordycg/.agents/skills/socratic-mentor",
+    "-/home/yordycg/.agents/skills/socratic-mentor",
+    "/home/yordycg/.agents/skills/emprendimiento-zettel",
+    "-/home/yordycg/.agents/skills/emprendimiento-zettel",
+    "/home/yordycg/.agents/skills/obsidian-query",
+    "-/home/yordycg/.agents/skills/obsidian-query",
+    "/home/yordycg/.agents/skills/youtube-transcript",
+    "-/home/yordycg/.agents/skills/youtube-transcript",
+    "/home/yordycg/.agents/skills/pdf-reader",
+    "-/home/yordycg/.agents/skills/pdf-reader"
+  ],
+  "extensions": [
+    "/home/yordycg/.pi/agent/extensions/quiz.ts",
+    "-/home/yordycg/.pi/agent/extensions/quiz.ts"
+  ]
+}
