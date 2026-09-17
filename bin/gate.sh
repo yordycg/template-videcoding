@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # gate.sh — Gate pre-commit del flujo videcoding.
-# Verifica: lint + tests + dual-write (TASKS.md <-> Project.canvas).
+# Verifica: lint + tests + integridad de tasks.yaml.
 set -euo pipefail
 
 echo "→ [gate] Lint..."

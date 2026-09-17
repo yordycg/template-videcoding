@@ -30,7 +30,7 @@ coverage/
 *.swp
 *.swo
 
-# Obsidian: ignorar estado local del vault, pero trackear plugins (ej. canvas-watcher)
+# Obsidian: ignorar estado local del vault
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 .obsidian/cache/

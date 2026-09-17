@@ -1,7 +1,7 @@
 # ROADMAP.md — Plan de trabajo (tareas atómicas)
 
 > El architect descompone el proyecto en tareas atómicas. Los workers las ejecutan **una a la vez** (WIP=1).
-> Cada bullet es UNA tarea con ID único. Se refleja en `TASKS.md` y en el tablero `Project.canvas` (dependencias = flechas).
+> Cada bullet es UNA tarea con ID único. Se refleja en `tasks.yaml` (SSOT) y en `TASKS.md` (con grafo Mermaid).
 > Formato del ID: `<ÁREA>-<NN>` (ej. `SETUP-01`, `API-01`).
 
 ## Fase 0 — Setup y skeleton *(la ejecuta el ARCHITECT)*
@@ -21,6 +21,6 @@
 <!--
 Reglas:
 - Tarea atómica = se implementa en < 1 commit con su test.
-- Dependencias: IDs que deben estar verdes antes de poder empezar.
-- El worker propone tareas nuevas en el canvas (🟣 purple) para que el humano las apruebe; no las añade como hechas.
+- Dependencias: IDs que deben estar hechos (done) antes de poder empezar.
+- El worker o architect proponen tareas nuevas vía `just task propose` (🟣 proposed) para que el humano las apruebe.
 -->

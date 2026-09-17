@@ -27,4 +27,4 @@
 
 ## Roadmap
 
-Ver [`docs/roadmap.md`](./docs/roadmap.md) y el tablero `Project.canvas`.
+Ver [`docs/roadmap.md`](./docs/roadmap.md) y el seguimiento de tareas en [`tasks.yaml`](./tasks.yaml) / [`TASKS.md`](./TASKS.md).
