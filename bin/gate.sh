@@ -9,7 +9,7 @@ just lint
 echo "→ [gate] Tests..."
 just test
 
-echo "→ [gate] Verificando dual-write (TASKS.md ↔ Project.canvas)..."
-python3 bin/sync-tracking.py --check
+echo "→ [gate] Verificando tareas e integridad del grafo (tasks.yaml)..."
+python3 bin/task.py check
 
 echo "✓ [gate] OK: listo para commit."

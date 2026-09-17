@@ -1,0 +1,37 @@
+# tasks.yaml — Single Source of Truth para seguimiento de tareas
+# Administrado con 'just task <cmd>' o 'bin/task.py'
+version: 1
+
+tasks:
+  - id: SETUP-01
+    title: "Bootstrap del proyecto y estructura inicial"
+    area: Setup
+    phase: 0
+    status: to_do
+    depends_on: []
+    desc: "Inicializar el repositorio, configurar tooling base (linter, test runner) y verificar Justfile."
+
+  - id: SETUP-02
+    title: "Estructura de carpetas y configuración de entorno"
+    area: Setup
+    phase: 0
+    status: blocked
+    depends_on: [SETUP-01]
+    desc: "Crear árbol de directorios del proyecto, archivos de configuración (.env.example, .editorconfig) y dependencias."
+
+  - id: SETUP-03
+    title: "Fijar .agents/codestyle.md y ejemplo de estilo heredado"
+    area: Setup
+    phase: 0
+    status: blocked
+    depends_on: [SETUP-02]
+    desc: "Definir las convenciones de código y documentar el ejemplo canónico que seguirán los workers."
+
+  - id: FEAT-01
+    title: "Primera feature / spike de dominio con TDD"
+    area: Core
+    phase: 1
+    status: proposed
+    depends_on: [SETUP-03]
+    desc: "Implementar la primera entidad y lógica de negocio aplicando el ciclo TDD estricto (RED -> GREEN -> REFACTOR)."
+

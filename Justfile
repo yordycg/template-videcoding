@@ -4,33 +4,47 @@
 default:
     @just --list
 
-# --- Tracking (Kanvas + TASKS.md) ---
+# --- Tracking (SSOT tasks.yaml) ---
 
 # Comprueba que el tablero está listo y muestra el estado
 setup:
     #!/usr/bin/env bash
     set -euo pipefail
-    test -f bin/canvas-tool.py || { echo "Falta bin/canvas-tool.py"; exit 1; }
-    test -f Project.canvas || { echo "Falta Project.canvas"; exit 1; }
+    test -f bin/task.py || { echo "Falta bin/task.py"; exit 1; }
+    test -f tasks.yaml || { echo "Falta tasks.yaml"; exit 1; }
     if command -v opencode &>/dev/null; then
         mkdir -p .opencode
         ln -sfn ../.agents/agents .opencode/agent
     fi
     test -f .pi/settings.json || echo "⚠ Falta .pi/settings.json para aislamiento de skills."
-    python3 bin/canvas-tool.py "Project.canvas" status
+    python3 bin/task.py status
     echo "✓ Tablero y entorno de agentes OK (OpenCode + Pi + Antigravity)."
 
 status:
-    python3 bin/canvas-tool.py "Project.canvas" status
+    python3 bin/task.py status
 
 ready:
-    python3 bin/canvas-tool.py "Project.canvas" ready
+    python3 bin/task.py ready
 
-# Reconciliar TASKS.md <-> Project.canvas (usar si divergen)
-sync-tracking:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    python3 bin/sync-tracking.py
+# Wrapper directo para comandos de bin/task.py
+task *ARGS:
+    python3 bin/task.py {{ARGS}}
+
+# Atajos para el ciclo de vida
+start ID:
+    python3 bin/task.py start {{ID}}
+
+finish ID:
+    python3 bin/task.py finish {{ID}}
+
+approve +IDS:
+    python3 bin/task.py approve {{IDS}}
+
+verify ID:
+    python3 bin/task.py verify {{ID}}
+
+render:
+    python3 bin/task.py render
 
 # Instalar el hook pre-commit que corre el gate
 install-hooks:

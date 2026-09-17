@@ -12,7 +12,8 @@ Este proyecto se ejecuta con el flujo de **videcoding**: un **architect** (model
 | 2 | `README.md` | Visión del proyecto terminado (producto final). |
 | 3 | `.agents/codestyle.md` | Reglas de estilo obligatorias para todo el código. |
 | 4 | `docs/roadmap.md` | Plan en tareas atómicas con fases y dependencias. |
-| 5 | `TASKS.md` + `Project.canvas` | Tracking de ejecución. **Siempre sincronizados (dual-write).** |
+| 5 | `tasks.yaml` | Tracking de ejecución y grafo de dependencias (**SSOT único**). |
+| 6 | `TASKS.md` | Vista humana y diagrama Mermaid generados automáticamente. |
 
 **Regla:** no asumas nada que no esté en `docs/specs.md`. Si una tarea necesita una decisión, pregúntala o documéntala (ADR liviano en `docs/specs.md §7` o en `docs/05-decisions.md`) antes de codear.
 
@@ -23,6 +24,7 @@ Este proyecto se ejecuta con el flujo de **videcoding**: un **architect** (model
 ### Architect (modelo potente)
 - Genera/refina `docs/specs.md`, `README.md`, `.agents/codestyle.md` y `docs/roadmap.md`.
 - Descompone el proyecto en tareas atómicas (una tarea = un commit con test).
+- Propone las tareas en `tasks.yaml` (`just task propose ...`).
 - Ejecuta la **Fase 0/1**: skeleton, tooling (test runner, linter), estructura y el ejemplo de estilo heredado.
 - Revisa el trabajo de los workers cuando el humano lo pida.
 - **No** implementa el grueso de las tareas: eso es trabajo del worker.
@@ -31,7 +33,7 @@ Este proyecto se ejecuta con el flujo de **videcoding**: un **architect** (model
 - Ejecuta **UNA tarea a la vez** (WIP=1).
 - Lee **solo la sección relevante** de `docs/specs.md` para su tarea (curse of instructions: más contexto = peor adherencia).
 - Aplica **TDD estricto** y corre los **gates** antes de cada commit.
-- Mantiene `TASKS.md` y `Project.canvas` sincronizados (**dual-write**).
+- Actualiza el estado de la tarea con `just start <ID>` y `just finish <ID>`.
 
 ---
 
@@ -52,44 +54,44 @@ Evidencia: el test falla **antes** de implementar y pasa **después**. `just tes
 1. `just lint` → sin errores.
 2. `just test` → sin errores.
 3. Formatear el código antes de commitear.
-4. `just gate` (o el hook pre-commit) verifica todo lo anterior + el dual-write.
+4. `just gate` (o el hook pre-commit) verifica lint + test + integridad del grafo en `tasks.yaml`.
 
 ---
 
 ## 5. No self-verify
 
 El agente que escribe **no** se marca done:
-- Termina y deja la tarea en **Review** (cian) → `python3 bin/canvas-tool.py "Project.canvas" finish <ID>`.
-- El **humano** revisa y pone el **verde** (done). Solo el humano.
+- Termina y deja la tarea en **Review** (cian) → `just finish <ID>`.
+- El **humano** revisa y pone el **verde** (done) con `just verify <ID>`. Solo el humano.
 
 ---
 
-## 6. Dual-write obligatorio (TASKS.md ↔ Project.canvas)
+## 6. Single Source of Truth (tasks.yaml)
 
-Cada cambio de estado de una tarea se refleja **en ambos sitios en el mismo commit**:
+`tasks.yaml` es la **única fuente de verdad** del estado de las tareas y sus dependencias (DAG). `TASKS.md` es una **vista derivada** (build artifact) generada automáticamente:
 
-| Estado | `Project.canvas` (via CLI) | `TASKS.md` |
-|--------|----------------------------|------------|
-| Propuesta | `propose` (🟣) | `- [ ]` en sección "Propuestas" |
-| Aprobada | humano la pone roja (🔴) | `- [ ]` en sección "Pendientes" |
-| En curso | `start <ID>` (🟠) | `- [ ]` con marcador `— ▶ en curso` |
-| En revisión | `finish <ID>` (🔵) | `- [ ]` con marcador `— 🔵 en revisión` |
-| Hecha | **humano** la pone verde (🟢) | `- [x]` en sección "Hechas" |
+| Estado | Comando CLI | Quién lo ejecuta |
+|--------|-------------|------------------|
+| Propuesta (🟣) | `just task propose ...` | Agente architect o humano |
+| Aprobada / To Do (🔴) | `just approve <ID>` | Humano (auto a ⬜ si tiene dependencias pendientes) |
+| En curso (🟠) | `just start <ID>` | Worker (valida WIP=1 y dependencias en verde) |
+| En revisión (🔵) | `just finish <ID>` | Worker (notifica fin de implementación) |
+| Hecha (🟢) | `just verify <ID>` | **Humano** (desbloquea en cascada las dependientes) |
 
-- **Nunca** editar `Project.canvas` a mano: siempre vía `python3 bin/canvas-tool.py "Project.canvas" <cmd>`.
-- Si los estados divergen, ejecutar `just sync-tracking` antes de continuar.
+- **Regeneración de vistas**: Cada transición vía CLI regenera automáticamente `TASKS.md` con tablas y el diagrama Mermaid. También se puede forzar con `just render`.
+- `just gate` valida que el grafo no tenga ciclos y que ninguna tarea activa viole sus dependencias.
 
 ---
 
 ## 7. Sesión típica del worker
 
-1. `just status` → lee el board (canvas) y `TASKS.md`.
-2. `just ready` → elige la tarea de mayor prioridad sin dependencias pendientes.
-3. `python3 bin/canvas-tool.py "Project.canvas" start <ID>` + marca `— ▶ en curso` en `TASKS.md`.
+1. `just status` → revisa métricas y estado del tablero.
+2. `just ready` → elige la tarea desbloqueada lista para tomar.
+3. `just start <ID>` → inicia la tarea (marca `doing`).
 4. **TDD**: test rojo → implementación mínima → refactor. `just test` en verde.
 5. Gates: `just lint` y `just test`. Formatear.
-6. `python3 bin/canvas-tool.py "Project.canvas" finish <ID>` + marca `— 🔵 en revisión` en `TASKS.md`.
-7. Commit convencional (código + `TASKS.md` + `Project.canvas` juntos).
+6. `just finish <ID>` → marca `review` y regenera vistas.
+7. Commit convencional (código + `tasks.yaml` + `TASKS.md` juntos).
 8. Reporta al humano: qué hizo, qué quedó pendiente, qué decide él.
 
 ---
