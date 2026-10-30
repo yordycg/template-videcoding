@@ -34,6 +34,10 @@ Este proyecto se ejecuta con el flujo de **videcoding**: un **architect** (model
 - Lee **solo la sección relevante** de `docs/specs.md` para su tarea (curse of instructions: más contexto = peor adherencia).
 - Aplica **TDD estricto** y corre los **gates** antes de cada commit.
 - Actualiza el estado de la tarea con `just start <ID>` y `just finish <ID>`.
+- **Edición de archivos:** al usar `edit`, copia el bloque **exacto** del archivo
+  (indentación incluida). Si el bloque no es único o no estás seguro de sus
+  espacios, usa `write` con el contenido completo en lugar de adivinar. Un `edit`
+  fallido cuesta un turno entero de contexto: verifica antes de reintentar.
 
 ---
 
@@ -86,7 +90,7 @@ El agente que escribe **no** se marca done:
 ## 7. Sesión típica del worker
 
 1. `just status` → revisa métricas y estado del tablero.
-2. `just ready` → elige la tarea desbloqueada lista para tomar.
+2. `just ready` → elige la tarea desbloqueada lista para tomar (falla si `lint`/`test` siguen siendo stubs de la Fase 0).
 3. `just start <ID>` → inicia la tarea (marca `doing`).
 4. **TDD**: test rojo → implementación mínima → refactor. `just test` en verde.
 5. Gates: `just lint` y `just test`. Formatear.
