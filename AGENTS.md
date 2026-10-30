@@ -26,6 +26,9 @@ Este proyecto se ejecuta con el flujo de **videcoding**: un **architect** (model
 - Descompone el proyecto en tareas atómicas (una tarea = un commit con test).
 - Propone las tareas en `tasks.yaml` (`just task propose ...`).
 - Ejecuta la **Fase 0/1**: skeleton, tooling (test runner, linter), estructura y el ejemplo de estilo heredado.
+  Hasta que sustituya los stubs de `lint`/`test` en el `Justfile`, `just ready`
+  y `just gate` **fallan a propósito** (`bin/check-stubs.sh`): un gate verde sin
+  haber ejecutado nada es peor que un gate rojo.
 - Revisa el trabajo de los workers cuando el humano lo pida.
 - **No** implementa el grueso de las tareas: eso es trabajo del worker.
 
