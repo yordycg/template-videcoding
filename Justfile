@@ -23,7 +23,11 @@ setup:
 status:
     python3 bin/task.py status
 
+# Falla si el proyecto sigue sin stack: evita un gate "verde" con lint/test stub.
 ready:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    bash bin/check-stubs.sh
     python3 bin/task.py ready
 
 # Wrapper directo para comandos de bin/task.py
@@ -56,17 +60,21 @@ install-hooks:
     echo "✓ Hook pre-commit instalado."
 
 # --- Calidad (gates) ---
-# FASE 0: el architect sustituye los targets lint/test/dev por los reales del stack.
+# FASE 0: el architect sustituye los targets lint/test/dev por los reales del
+# stack. Mientras sigan siendo stubs FALLAN: un gate que sale con 0 sin haber
+# ejecutado nada es peor que ninguno (ver bin/check-stubs.sh).
 
 lint:
     #!/usr/bin/env bash
     set -euo pipefail
-    echo "⚠  FASE 0: define 'lint' en el Justfile (ruff, eslint, prettier --check...)."
+    echo "✗ FASE 0: define 'lint' en el Justfile (ruff, eslint, prettier --check...)." >&2
+    exit 1
 
 test:
     #!/usr/bin/env bash
     set -euo pipefail
-    echo "⚠  FASE 0: define 'test' en el Justfile (pytest, vitest, go test...)."
+    echo "✗ FASE 0: define 'test' en el Justfile (pytest, vitest, go test...)." >&2
+    exit 1
 
 # Gate completo pre-commit: lint + test + dual-write
 gate:
@@ -77,4 +85,5 @@ gate:
 dev:
     #!/usr/bin/env bash
     set -euo pipefail
-    echo "⚠  FASE 0: define 'dev' en el Justfile (uvicorn, vite, cargo run...)."
+    echo "✗ FASE 0: define 'dev' en el Justfile (uvicorn, vite, cargo run...)." >&2
+    exit 1
