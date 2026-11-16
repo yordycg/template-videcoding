@@ -50,14 +50,16 @@ verify ID:
 render:
     python3 bin/task.py render
 
-# Instalar el hook pre-commit que corre el gate
+# Instalar los hooks de git: gate pre-commit y bootstrap de worktrees
 install-hooks:
     #!/usr/bin/env bash
     set -euo pipefail
-    mkdir -p .git/hooks
-    cp bin/pre-commit .git/hooks/pre-commit
-    chmod +x .git/hooks/pre-commit
-    echo "✓ Hook pre-commit instalado."
+    hooks_dir="$(git rev-parse --git-path hooks)"
+    mkdir -p "$hooks_dir"
+    cp bin/pre-commit "$hooks_dir/pre-commit"
+    cp bin/post-checkout "$hooks_dir/post-checkout"
+    chmod +x "$hooks_dir/pre-commit" "$hooks_dir/post-checkout"
+    echo "✓ Hooks pre-commit y post-checkout instalados en ${hooks_dir}."
 
 # --- Calidad (gates) ---
 # FASE 0: el architect sustituye los targets lint/test/dev por los reales del
