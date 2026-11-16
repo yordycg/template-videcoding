@@ -65,7 +65,21 @@ Evidencia: el test falla **antes** de implementar y pasa **después**. `just tes
 
 ---
 
-## 5. No self-verify
+## 5. Herramientas de tokens
+
+Dos reglas para no inundar el contexto; detalle en la skill `token-tools` de
+`agent-governance`.
+
+- **`rtk` para salida verbosa**: `rtk git status`, `rtk git log`, `rtk ls`,
+  `rtk test <cmd>`. Conserva el exit code; si oculta algo que necesitas, repite
+  el comando crudo. **Nunca `rtk read`** para leer código.
+- **`fff` para búsquedas repetidas**: si el cliente lo expone (`find_files`,
+  `grep`, `multi_grep`), úsalo tras la primera búsqueda en la sesión; para un
+  disparo puntual, `rg`/`fd` es más barato.
+- Si un subcomando no baja ≥30 % el output en tu caso, no lo forces: mide y usa
+  el original.
+
+## 6. No self-verify
 
 El agente que escribe **no** se marca done:
 - Termina y deja la tarea en **Review** (cian) → `just finish <ID>`.
@@ -73,7 +87,7 @@ El agente que escribe **no** se marca done:
 
 ---
 
-## 6. Single Source of Truth (tasks.yaml)
+## 7. Single Source of Truth (tasks.yaml)
 
 `tasks.yaml` es la **única fuente de verdad** del estado de las tareas y sus dependencias (DAG). `TASKS.md` es una **vista derivada** (build artifact) generada automáticamente:
 
@@ -90,7 +104,7 @@ El agente que escribe **no** se marca done:
 
 ---
 
-## 7. Sesión típica del worker
+## 8. Sesión típica del worker
 
 1. `just status` → revisa métricas y estado del tablero.
 2. `just ready` → elige la tarea desbloqueada lista para tomar (falla si `lint`/`test` siguen siendo stubs de la Fase 0).
@@ -103,7 +117,7 @@ El agente que escribe **no** se marca done:
 
 ---
 
-## 8. Commits
+## 9. Commits
 
 - [Conventional Commits](https://www.conventionalcommits.org/) en inglés (`feat:`, `fix:`, `test:`, `docs:`, `chore:`).
 - **Un checkpoint significativo = un commit.** El historial de git es el plan.
@@ -111,7 +125,7 @@ El agente que escribe **no** se marca done:
 
 ---
 
-## 9. Modelos y proveedores
+## 10. Modelos y proveedores
 
 | Rol | Modelo | Proveedor | Uso |
 |-----|--------|-----------|-----|
@@ -121,7 +135,7 @@ El agente que escribe **no** se marca done:
 
 ---
 
-## 10. Notas por agente
+## 11. Notas por agente
 
 ### opencode
 - Subagentes en `.agents/agents/`: `architect.md`, `worker.md` y `scout.md`.
