@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# =============================================================================
+# post-checkout — bootstrap a newly created worktree.
+#
+# Git runs this on every checkout; it only acts when the new checkout is a
+# linked worktree (`git-dir` differs from `git-common-dir`) and the checkout
+# switched branches ($3 = 1). The work is done by `~/.local/bin/worktree-bootstrap`:
+# copy ignored `.env` files, install dependencies and run an optional
+# `.herdr/worktree-bootstrap.sh`.
+#
+# Always exits 0: a bootstrap failure must not block `git worktree add`.
+# Install with `just install-hooks`. See README § Worktrees.
+# =============================================================================
+set -uo pipefail
+
+[ "${3:-0}" = "1" ] || exit 0
+git rev-parse --is-inside-work-tree > /dev/null 2>&1 || exit 0
+
+git_dir="$(git rev-parse --absolute-git-dir 2> /dev/null)" || exit 0
+common_dir="$(git rev-parse --path-format=absolute --git-common-dir 2> /dev/null)" || exit 0
+# Same directory means the main checkout, not a linked worktree.
+[ "$git_dir" != "$common_dir" ] || exit 0
+
+helper="$HOME/.local/bin/worktree-bootstrap"
+[ -x "$helper" ] || exit 0
+
+top="$(git rev-parse --show-toplevel 2> /dev/null)" || exit 0
+"$helper" "$top" || true
+exit 0
